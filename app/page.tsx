@@ -3,36 +3,73 @@
 import { Button } from "@/app/components/ui/button";
 import { HeroCard } from "@/app/components/HeroCard";
 import { PhotoGallery } from "@/app/components/PhotoGallery";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { LogoCloud } from "@/app/components/LogoCloud";
 import Image from "next/image";
 import Link from "next/link";
+import { useMemo } from "react";
 
 export default function Home() {
+  // Use reduced motion hook to respect user preferences
+  const prefersReducedMotion = useReducedMotion();
+  
   const keys = [
     "Segurança para o óbvio",
     "Estratégia para o improvável",
     "Proteção para o impossível",
   ];
+  
+  // Memoize animation variants to prevent recalculation on re-renders
+  const animations = useMemo(() => {
+    // Simplified animations for users who prefer reduced motion
+    if (prefersReducedMotion) {
+      return {
+        fadeIn: {
+          initial: { opacity: 0 },
+          animate: { opacity: 1 },
+          transition: { duration: 0.5 }
+        },
+        fadeInUp: {
+          initial: { opacity: 0 },
+          animate: { opacity: 1 },
+          transition: { duration: 0.5 }
+        }
+      };
+    }
+    
+    // Regular animations for other users
+    return {
+      fadeIn: {
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        transition: { duration: 0.8, ease: "easeOut" }
+      },
+      fadeInUp: {
+        initial: { opacity: 0, y: 20 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.6, ease: "easeOut" }
+      }
+    };
+  }, [prefersReducedMotion]);
+  
   return (
     <>
       <main className="py-4 bg-gradient-to-b from-blue-50 to-white">
         <motion.section
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          initial={animations.fadeIn.initial}
+          animate={animations.fadeIn.animate}
+          transition={animations.fadeIn.transition}
           className="relative py-6 px-4 tablet:py-20 tablet:px-6 desktop:px-8"
+          style={{ willChange: "opacity" }}
         >
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-col desktop:flex-row desktop:items-center desktop:gap-16 text-center desktop:text-left">
               <div className="flex flex-col gap-6 desktop:gap-8">
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.8,
-                    ease: "easeOut",
-                  }}
+                  initial={animations.fadeInUp.initial}
+                  animate={animations.fadeInUp.animate}
+                  transition={animations.fadeInUp.transition}
+                  style={{ willChange: "opacity, transform" }}
                 >
                   <span className="text-2xl font-bold text-primary tablet:text-4xl desktop:pt-0 desktop:text-6xl">
                     <Image
@@ -56,13 +93,10 @@ export default function Home() {
                 </motion.div>
                 <motion.p
                   className="desktop:text-lg text-base text-gray-600 leading-relaxed"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.8,
-                    delay: 0.3,
-                    ease: "easeOut",
-                  }}
+                  initial={animations.fadeInUp.initial}
+                  animate={animations.fadeInUp.animate}
+                  transition={{ ...animations.fadeInUp.transition, delay: 0.3 }}
+                  style={{ willChange: "opacity, transform" }}
                 >
                   Há mais de 20 anos a oferecer soluções de seguros
                   personalizadas para particulares e empresas. A sua
@@ -70,13 +104,10 @@ export default function Home() {
                 </motion.p>
                 <motion.div
                   className="flex flex-col gap-3 tablet:flex-row tablet:gap-4 desktop:justify-start justify-center"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.8,
-                    delay: 0.6,
-                    ease: "easeOut",
-                  }}
+                  initial={animations.fadeInUp.initial}
+                  animate={animations.fadeInUp.animate}
+                  transition={{ ...animations.fadeInUp.transition, delay: 0.6 }}
+                  style={{ willChange: "opacity, transform" }}
                 >
                   <Link href="/simulacao" className="w-full tablet:w-auto">
                     <Button
@@ -107,11 +138,12 @@ export default function Home() {
         <LogoCloud />
 
         <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          initial={animations.fadeInUp.initial}
+          whileInView={animations.fadeInUp.animate}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={animations.fadeInUp.transition}
           className="py-24 px-4 tablet:px-6 desktop:px-8 bg-white"
+          style={{ willChange: "opacity, transform" }}
         >
           <div className="mx-auto max-w-7xl">
             <div className="text-center max-w-3xl mx-auto mb-16">
@@ -140,11 +172,12 @@ export default function Home() {
         </motion.section>
 
         <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          initial={animations.fadeInUp.initial}
+          whileInView={animations.fadeInUp.animate}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={animations.fadeInUp.transition}
           className="py-20 px-4 tablet:px-6 desktop:px-8"
+          style={{ willChange: "opacity, transform" }}
         >
           <div className="mx-auto max-w-7xl">
             <div className="text-center max-w-3xl mx-auto mb-16">
@@ -204,6 +237,7 @@ export default function Home() {
                     animate-[fadeInUp_0.5s_ease-out_forwards]`}
                   style={{
                     animationDelay: `${index * 100}ms`,
+                    willChange: "opacity, transform"
                   }}
                 >
                   <div className="text-3xl tablet:text-4xl mb-4 tablet:mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -239,11 +273,12 @@ export default function Home() {
         </motion.section>
 
         <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          initial={animations.fadeInUp.initial}
+          whileInView={animations.fadeInUp.animate}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={animations.fadeInUp.transition}
           className="py-24 px-4 tablet:px-6 desktop:px-8 bg-gradient-to-br from-primary/5 to-primary/10 rounded-3xl mx-4 my-12"
+          style={{ willChange: "opacity, transform" }}
         >
           <div className="mx-auto max-w-7xl">
             <div className="text-center max-w-3xl mx-auto">

@@ -2,8 +2,9 @@
 
 import { Card } from "@/app/components/ui/card";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
+import { useMemo } from "react";
 
 interface HeroCardProps {
   title: string;
@@ -18,12 +19,25 @@ export function HeroCard({
   imageSrc,
   imageAlt,
 }: HeroCardProps) {
+  const prefersReducedMotion = useReducedMotion();
+  
+  // Memoize animation variants to prevent recalculation on re-renders
+  const hoverAnimation = useMemo(() => {
+    if (prefersReducedMotion) {
+      return {};
+    }
+    return { 
+      whileHover: { scale: 1.02 },
+      transition: { duration: 0.3, type: "tween" }
+    };
+  }, [prefersReducedMotion]);
+  
   return (
     <Link href="/simulacao">
       <motion.div
-        whileHover={{ scale: 1.02 }}
-        transition={{ duration: 0.3 }}
+        {...hoverAnimation}
         className="h-full"
+        style={{ willChange: "transform" }}
       >
         <Card className="overflow-hidden h-[400px] flex flex-col group cursor-pointer">
           <div className="p-8 h-[35%] group-hover:bg-gray-50 transition-colors duration-300">
@@ -39,6 +53,7 @@ export function HeroCard({
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
               priority
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </div>
