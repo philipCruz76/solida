@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   FaPhone,
@@ -9,6 +9,7 @@ import {
   FaFacebook,
   FaLinkedin,
 } from "react-icons/fa";
+import DOMPurify from "isomorphic-dompurify";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -19,10 +20,109 @@ export default function ContactPage() {
     phone: "",
     message: "",
   });
+  const [csrfToken, setCsrfToken] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  // Fetch CSRF token on component mount
+  useEffect(() => {
+    // In a real implementation, you would fetch a CSRF token from your server
+    // This is a simplified example
+    const generateCsrfToken = () => {
+      return Math.random().toString(36).substring(2, 15) + 
+             Math.random().toString(36).substring(2, 15);
+    };
+    
+    setCsrfToken(generateCsrfToken());
+  }, []);
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    
+    // Validate email with regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      newErrors.email = "Por favor, insira um email válido";
+    }
+    
+    // Validate phone number (simple validation)
+    const phoneRegex = /^\+?[0-9\s]{9,15}$/;
+    if (!phoneRegex.test(formData.phone)) {
+      newErrors.phone = "Por favor, insira um número de telefone válido";
+    }
+    
+    // Validate required fields
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = "Nome é obrigatório";
+    }
+    
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = "Apelido é obrigatório";
+    }
+    
+    if (!formData.message.trim()) {
+      newErrors.message = "Mensagem é obrigatória";
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
+    
+    if (!validateForm()) {
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    try {
+      // Sanitize all input data before sending to server
+      const sanitizedData = {
+        category: DOMPurify.sanitize(formData.category),
+        firstName: DOMPurify.sanitize(formData.firstName),
+        lastName: DOMPurify.sanitize(formData.lastName),
+        email: DOMPurify.sanitize(formData.email),
+        phone: DOMPurify.sanitize(formData.phone),
+        message: DOMPurify.sanitize(formData.message),
+        csrfToken
+      };
+      
+      console.log(sanitizedData);
+      
+      // In a real implementation, you would send this data to your server
+      // const response = await fetch('/api/contact', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(sanitizedData),
+      // });
+      
+      // if (!response.ok) {
+      //   throw new Error('Failed to submit form');
+      // }
+      
+      // Simulate successful submission
+      setTimeout(() => {
+        setSubmitSuccess(true);
+        setFormData({
+          category: "",
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          message: "",
+        });
+        setIsSubmitting(false);
+      }, 1000);
+      
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -41,96 +141,141 @@ export default function ContactPage() {
               <h1 className="text-3xl font-medium text-gray-900 mb-8">
                 Fale Connosco
               </h1>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <select
-                    value={formData.category}
-                    onChange={(e) =>
-                      setFormData({ ...formData, category: e.target.value })
-                    }
-                    className="w-full border-b border-gray-200 bg-transparent py-3 focus:border-primary focus:outline-none"
+              
+              {submitSuccess ? (
+                <div className="bg-green-50 border border-green-200 text-green-700 p-4 rounded-md mb-6">
+                  <p className="font-medium">Mensagem enviada com sucesso!</p>
+                  <p className="mt-1">Entraremos em contacto consigo brevemente.</p>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Hidden CSRF token field */}
+                  <input type="hidden" name="csrfToken" value={csrfToken} />
+                  
+                  <div>
+                    <select
+                      value={formData.category}
+                      onChange={(e) =>
+                        setFormData({ ...formData, category: e.target.value })
+                      }
+                      className="w-full border-b border-gray-200 bg-transparent py-3 focus:border-primary focus:outline-none"
+                    >
+                      <option value="">Selecione o tipo de seguro</option>
+                      <option value="auto">Automóvel</option>
+                      <option value="health">Saúde</option>
+                      <option value="life">Vida</option>
+                      <option value="home">Habitação</option>
+                    </select>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Nome"
+                        value={formData.firstName}
+                        onChange={(e) =>
+                          setFormData({ ...formData, firstName: e.target.value })
+                        }
+                        className={`w-full border-b ${errors.firstName ? 'border-red-500' : 'border-gray-200'} bg-transparent py-3 focus:border-primary focus:outline-none`}
+                        required
+                      />
+                      {errors.firstName && (
+                        <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>
+                      )}
+                    </div>
+                    
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Apelido"
+                        value={formData.lastName}
+                        onChange={(e) =>
+                          setFormData({ ...formData, lastName: e.target.value })
+                        }
+                        className={`w-full border-b ${errors.lastName ? 'border-red-500' : 'border-gray-200'} bg-transparent py-3 focus:border-primary focus:outline-none`}
+                        required
+                      />
+                      {errors.lastName && (
+                        <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <input
+                      type="email"
+                      placeholder="Endereço de email"
+                      value={formData.email}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
+                      className={`w-full border-b ${errors.email ? 'border-red-500' : 'border-gray-200'} bg-transparent py-3 focus:border-primary focus:outline-none`}
+                      required
+                    />
+                    {errors.email && (
+                      <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                    )}
+                  </div>
+                  
+                  <div>
+                    <input
+                      type="tel"
+                      placeholder="Número de telefone"
+                      value={formData.phone}
+                      onChange={(e) =>
+                        setFormData({ ...formData, phone: e.target.value })
+                      }
+                      className={`w-full border-b ${errors.phone ? 'border-red-500' : 'border-gray-200'} bg-transparent py-3 focus:border-primary focus:outline-none`}
+                      required
+                    />
+                    {errors.phone && (
+                      <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+                    )}
+                  </div>
+                  
+                  <div>
+                    <textarea
+                      placeholder="A sua mensagem"
+                      value={formData.message}
+                      onChange={(e) =>
+                        setFormData({ ...formData, message: e.target.value })
+                      }
+                      rows={4}
+                      className={`w-full border-b ${errors.message ? 'border-red-500' : 'border-gray-200'} bg-transparent py-3 focus:border-primary focus:outline-none`}
+                      required
+                    />
+                    {errors.message && (
+                      <p className="text-red-500 text-sm mt-1">{errors.message}</p>
+                    )}
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="newsletter"
+                      className="rounded border-gray-200"
+                    />
+                    <label htmlFor="newsletter" className="text-sm text-gray-600">
+                      Gostaria de receber notícias e ofertas promocionais da
+                      Sólida.
+                    </label>
+                  </div>
+                  
+                  <div className="text-sm text-gray-500">
+                    Ao clicar em enviar, concorda com os nossos termos de
+                    utilização e política de privacidade.
+                  </div>
+                  
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-primary text-white px-8 py-4 rounded-md hover:bg-primary/90 transition-colors disabled:opacity-70"
                   >
-                    <option value="">Selecione o tipo de seguro</option>
-                    <option value="auto">Automóvel</option>
-                    <option value="health">Saúde</option>
-                    <option value="life">Vida</option>
-                    <option value="home">Habitação</option>
-                  </select>
-                </div>
-                <div className="grid grid-cols-2 gap-6">
-                  <input
-                    type="text"
-                    placeholder="Nome"
-                    value={formData.firstName}
-                    onChange={(e) =>
-                      setFormData({ ...formData, firstName: e.target.value })
-                    }
-                    className="w-full border-b border-gray-200 bg-transparent py-3 focus:border-primary focus:outline-none"
-                    required
-                  />
-                  <input
-                    type="text"
-                    placeholder="Apelido"
-                    value={formData.lastName}
-                    onChange={(e) =>
-                      setFormData({ ...formData, lastName: e.target.value })
-                    }
-                    className="w-full border-b border-gray-200 bg-transparent py-3 focus:border-primary focus:outline-none"
-                    required
-                  />
-                </div>
-                <input
-                  type="email"
-                  placeholder="Endereço de email"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                  className="w-full border-b border-gray-200 bg-transparent py-3 focus:border-primary focus:outline-none"
-                  required
-                />
-                <input
-                  type="tel"
-                  placeholder="Número de telefone"
-                  value={formData.phone}
-                  onChange={(e) =>
-                    setFormData({ ...formData, phone: e.target.value })
-                  }
-                  className="w-full border-b border-gray-200 bg-transparent py-3 focus:border-primary focus:outline-none"
-                  required
-                />
-                <textarea
-                  placeholder="A sua mensagem"
-                  value={formData.message}
-                  onChange={(e) =>
-                    setFormData({ ...formData, message: e.target.value })
-                  }
-                  rows={4}
-                  className="w-full border-b border-gray-200 bg-transparent py-3 focus:border-primary focus:outline-none"
-                  required
-                />
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="newsletter"
-                    className="rounded border-gray-200"
-                  />
-                  <label htmlFor="newsletter" className="text-sm text-gray-600">
-                    Gostaria de receber notícias e ofertas promocionais da
-                    Sólida.
-                  </label>
-                </div>
-                <div className="text-sm text-gray-500">
-                  Ao clicar em enviar, concorda com os nossos termos de
-                  utilização e política de privacidade.
-                </div>
-                <button
-                  type="submit"
-                  className="w-full bg-primary text-white px-8 py-4 rounded-md hover:bg-primary/90 transition-colors"
-                >
-                  Enviar Mensagem
-                </button>
-              </form>
+                    {isSubmitting ? "A enviar..." : "Enviar Mensagem"}
+                  </button>
+                </form>
+              )}
             </motion.div>
 
             {/* Image Section */}
