@@ -1,59 +1,36 @@
 "use client";
 
+import { FC } from 'react';
 import Link from "next/link";
 import Image from "next/image";
-import { Linkedin, Instagram, Facebook, Phone, Mail } from "lucide-react";
-import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { Phone, Mail } from "lucide-react";
+import { FooterNavSection } from "./layout/FooterNavSection";
+import { FOOTER_NAV, SOCIAL_LINKS } from "@/app/constants/navigation";
+import { ROUTES } from "@/app/constants/routes";
 
-const navigation = {
-  servicos: [
-    { name: "Mediação de Seguros Pessoais", href: "/servicos#pessoais" },
-    {
-      name: "Mediação de Seguros Empresariais",
-      href: "/servicos#empresariais",
-    },
-  ],
-  empresa: [
-    { name: "Por Que Nós", href: "/sobre" },
-    { name: "Carreiras", href: "/carreiras" },
-    { name: "Seja um Agente", href: "/carreiras#agente" },
-  ],
-  recursos: [
-    { name: "Ferramentas & Dicas", href: "/recursos" },
-    { name: "Blog", href: "/blog" },
-    { name: "FAQs", href: "/faq" },
-  ],
-  contacto: [
-    { name: "Contacte-nos", href: "/contactos" },
-    { name: "Obter Cotação", href: "/simulacao" },
-  ],
-  social: [
-    {
-      name: "Facebook",
-      icon: FaFacebook,
-      href: "https://www.facebook.com/solidamediadoresdeseguros",
-    },
-    {
-      name: "Instagram",
-      icon: FaInstagram,
-      href: "https://instagram.com/solida.ao",
-    },
-    {
-      name: "LinkedIn",
-      icon: FaLinkedin,
-      href: "https://ao.linkedin.com/company/sólida-mediação-de-seguros",
-    },
-  ],
-};
+/**
+ * Props for the Footer component
+ */
+interface FooterProps {
+  // Any future props would be defined here
+}
 
-export function Footer() {
+/**
+ * Main footer component for the application.
+ * Contains navigation sections, contact information, and social media links.
+ * 
+ * @returns The application footer
+ */
+export const Footer: FC<FooterProps> = () => {
+  const currentYear = new Date().getFullYear();
+  
   return (
     <footer className="bg-white border-t border-gray-200 text-gray-600 py-16 px-4 tablet:px-6 desktop:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="grid grid-cols-1 gap-8 tablet:grid-cols-2 desktop:grid-cols-6">
           {/* Contact Info */}
           <div className="desktop:col-span-2">
-            <Link href="/" className="block mb-6">
+            <Link href={ROUTES.HOME} className="block mb-6">
               <Image
                 src="/solida-logo.png"
                 alt="Sólida"
@@ -71,6 +48,7 @@ export function Footer() {
                 <a
                   href="tel:+244923590525"
                   className="hover:text-primary transition-colors"
+                  aria-label="Call us at +244 923 590 525"
                 >
                   +244 923 590 525
                 </a>
@@ -80,20 +58,22 @@ export function Footer() {
                 <a
                   href="mailto:geral@solida.co.ao"
                   className="hover:text-primary transition-colors"
+                  aria-label="Email us at geral@solida.co.ao"
                 >
                   geral@solida.co.ao
                 </a>
               </div>
               <div className="flex items-center gap-4 pt-2">
-                {navigation.social.map((item) => {
+                {SOCIAL_LINKS.map((item) => {
                   const Icon = item.icon;
                   return (
                     <Link
-                      key={item.name}
+                      key={`social-${item.name.toLowerCase()}`}
                       href={item.href}
-                      className="text-gray-400 hover:text-primary transition-colors"
+                      className="text-gray-600 hover:text-primary transition-colors"
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label={`Visit our ${item.name} page`}
                     >
                       <Icon className="h-5 w-5" />
                     </Link>
@@ -103,78 +83,11 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Navigation */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-gray-900">
-              Serviços
-            </h3>
-            <ul className="space-y-2">
-              {navigation.servicos.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    href={item.href}
-                    className="text-gray-600 hover:text-primary transition-colors"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-gray-900">
-              Empresa
-            </h3>
-            <ul className="space-y-2">
-              {navigation.empresa.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    href={item.href}
-                    className="text-gray-600 hover:text-primary transition-colors"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-gray-900">
-              Recursos
-            </h3>
-            <ul className="space-y-2">
-              {navigation.recursos.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    href={item.href}
-                    className="text-gray-600 hover:text-primary transition-colors"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-gray-900">
-              Contacto
-            </h3>
-            <ul className="space-y-2">
-              {navigation.contacto.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    href={item.href}
-                    className="text-gray-600 hover:text-primary transition-colors"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Navigation - Using the reusable FooterNavSection component */}
+          <FooterNavSection title="Serviços" links={FOOTER_NAV.SERVICES} />
+          <FooterNavSection title="Empresa" links={FOOTER_NAV.ABOUT} />
+          <FooterNavSection title="Recursos" links={FOOTER_NAV.RESOURCES} />
+          <FooterNavSection title="Contacto" links={FOOTER_NAV.CONTACT} />
         </div>
 
         {/* Bottom Section */}
@@ -182,17 +95,16 @@ export function Footer() {
           <div className="flex flex-col gap-4 tablet:flex-row tablet:items-center tablet:justify-between">
             <div className="flex flex-col tablet:flex-row tablet:gap-8 text-sm text-gray-500">
               <p>
-                © {new Date().getFullYear()} Sólida Seguros. Todos os direitos
-                reservados.
+                © {currentYear} Sólida Seguros. Todos os direitos reservados.
               </p>
               <Link
-                href="/privacidade"
+                href={ROUTES.PRIVACY}
                 className="hover:text-primary transition-colors"
               >
                 Política de Privacidade
               </Link>
               <Link
-                href="/termos"
+                href={ROUTES.TERMS}
                 className="hover:text-primary transition-colors"
               >
                 Termos de Serviço
@@ -203,4 +115,4 @@ export function Footer() {
       </div>
     </footer>
   );
-}
+};

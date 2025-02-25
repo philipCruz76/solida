@@ -1,0 +1,82 @@
+{
+  "extends": [
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:jest/recommended",
+    "prettier"
+  ],
+  "plugins": [
+    "react",
+    "react-hooks",
+    "@typescript-eslint",
+    "jest"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2021,
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "rules": {
+    // React specific rules
+    "react/prop-types": "off", // Disable prop-types as we use TypeScript
+    "react/react-in-jsx-scope": "off", // Not needed in Next.js
+    "react/jsx-uses-react": "off", // Not needed with new JSX transform
+    "react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
+    "react/jsx-key": "error",
+    "react/jsx-curly-brace-presence": ["error", { "props": "never", "children": "never" }],
+    "react/self-closing-comp": ["error", { "component": true, "html": true }],
+    "react/no-array-index-key": "warn",
+    
+    // React-hooks rules
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    
+    // TypeScript specific rules
+    "@typescript-eslint/explicit-module-boundary-types": "off", // Too restrictive for React components
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "@typescript-eslint/no-explicit-any": "warn", // Warn about any usage
+    "@typescript-eslint/ban-ts-comment": "warn",
+    "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
+    "@typescript-eslint/no-non-null-assertion": "warn",
+    
+    // General rules
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "eqeqeq": ["error", "always", { "null": "ignore" }],
+    "prefer-const": "error",
+    "no-var": "error",
+    "arrow-body-style": ["error", "as-needed"],
+    "curly": ["error", "multi-line"],
+    "no-nested-ternary": "warn",
+    "no-duplicate-imports": "error",
+    "spaced-comment": ["error", "always"],
+    
+    // Next.js specific rules
+    "@next/next/no-img-element": "warn", // Use next/image
+    "@next/next/no-html-link-for-pages": "error" // Use Link component
+  },
+  "overrides": [
+    {
+      "files": ["**/__tests__/**/*.ts?(x)", "**/?(*.)+(spec|test).ts?(x)"],
+      "extends": ["plugin:testing-library/react"],
+      "rules": {
+        "testing-library/await-async-query": "error",
+        "testing-library/no-await-sync-query": "error",
+        "testing-library/no-container": "error",
+        "testing-library/no-node-access": "error",
+        "testing-library/prefer-screen-queries": "error"
+      }
+    }
+  ]
+} 

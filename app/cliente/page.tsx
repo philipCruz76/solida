@@ -15,6 +15,7 @@ import { Mail, Lock, ArrowRight, User, Phone } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 
 // Form validation schemas
 const loginSchema = z.object({
@@ -76,7 +77,7 @@ export default function LoginPage() {
 
   return (
     <main className="min-h-screen p-8 tablet:p-12 desktop:p-20 bg-gradient-to-b from-blue-50 to-white">
-      <div className="max-w-7xl mx-auto px-4 tablet:px-6 desktop:px-8">
+      <div className="max-w-7xl pt-20 mx-auto px-4 tablet:px-6 desktop:px-8">
         <div className="grid grid-cols-1 desktop:grid-cols-2 gap-12 items-center">
           {/* Form Section */}
           <motion.div
@@ -153,12 +154,12 @@ export default function LoginPage() {
                               Lembrar-me
                             </span>
                           </label>
-                          <button
-                            type="button"
+                          <Link
+                            href={"/cliente/esqueci-a-senha"}
                             className="text-sm text-primary hover:text-primary/80 transition-colors"
                           >
                             Esqueceu a senha?
-                          </button>
+                          </Link>
                         </div>
 
                         <Button
