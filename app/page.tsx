@@ -8,6 +8,7 @@ import { LogoCloud } from "@/app/components/LogoCloud";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
+import { InsuranceAgencyJsonLd, FAQJsonLd } from "@/app/components/JsonLd";
 
 export default function Home() {
   // Use reduced motion hook to respect user preferences
@@ -54,6 +55,27 @@ export default function Home() {
   
   return (
     <>
+      <InsuranceAgencyJsonLd />
+      <FAQJsonLd 
+        questions={[
+          {
+            question: "Que tipos de seguros a Sólida oferece?",
+            answer: "A Sólida oferece uma ampla gama de seguros, incluindo seguros de vida, saúde, automóvel, habitação, empresariais e de acidentes, todos personalizados para atender às suas necessidades específicas."
+          },
+          {
+            question: "Como posso solicitar uma simulação de seguro?",
+            answer: "Você pode solicitar uma simulação gratuita através do nosso site, clicando no botão 'Pedir Simulação', ou entrando em contato diretamente conosco por telefone ou email."
+          },
+          {
+            question: "A Sólida trabalha com seguros para empresas?",
+            answer: "Sim, oferecemos soluções corporativas completas para proteger seu negócio, desde seguros de responsabilidade civil até proteção patrimonial."
+          },
+          {
+            question: "Há quanto tempo a Sólida atua no mercado de seguros?",
+            answer: "A Sólida atua há mais de 20 anos no mercado de seguros, oferecendo soluções personalizadas para particulares e empresas."
+          }
+        ]}
+      />
       <main className="py-4 bg-gradient-to-b from-blue-50 to-white">
         <motion.section
           initial={animations.fadeIn.initial}
@@ -61,6 +83,7 @@ export default function Home() {
           transition={animations.fadeIn.transition}
           className="relative py-6 px-4 tablet:py-20 tablet:px-6 desktop:px-8"
           style={{ willChange: "opacity" }}
+          aria-label="Introdução"
         >
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-col desktop:flex-row desktop:items-center desktop:gap-16 text-center desktop:text-left">
@@ -71,10 +94,13 @@ export default function Home() {
                   transition={animations.fadeInUp.transition}
                   style={{ willChange: "opacity, transform" }}
                 >
-                  <span className="text-2xl font-bold text-primary tablet:text-4xl desktop:pt-0 desktop:text-6xl">
+                  <h1 className="text-2xl font-bold text-primary tablet:text-4xl desktop:pt-0 desktop:text-6xl sr-only">
+                    Sólida Seguros - Mediação de Seguros Personalizados
+                  </h1>
+                  <div className="text-2xl font-bold text-primary tablet:text-4xl desktop:pt-0 desktop:text-6xl">
                     <Image
                       src="/solida-logo.png"
-                      alt="Sólida"
+                      alt="Sólida Seguros - Logotipo"
                       width={200}
                       height={200}
                       className="w-[200px] h-[200px] mx-auto object-contain"
@@ -89,7 +115,7 @@ export default function Home() {
                         ))}
                       </span>
                     </div>
-                  </span>
+                  </div>
                 </motion.div>
                 <motion.p
                   className="desktop:text-lg text-base text-gray-600 leading-relaxed"
@@ -109,7 +135,7 @@ export default function Home() {
                   transition={{ ...animations.fadeInUp.transition, delay: 0.6 }}
                   style={{ willChange: "opacity, transform" }}
                 >
-                  <Link href="/simulacao" className="w-full tablet:w-auto">
+                  <Link href="/simulacao" className="w-full tablet:w-auto" aria-label="Pedir simulação de seguro">
                     <Button
                       size="lg"
                       className="w-full py-6 text-base font-medium bg-primary rounded-xl hover:bg-primary/90 text-white shadow-lg hover:scale-105 transition-all duration-300 shadow-primary/25"
@@ -117,7 +143,7 @@ export default function Home() {
                       Pedir Simulação
                     </Button>
                   </Link>
-                  <Link href="/sobre" className="w-full tablet:w-auto">
+                  <Link href="/sobre" className="w-full tablet:w-auto" aria-label="Saber mais sobre a Sólida Seguros">
                     <Button
                       variant="outline"
                       size="lg"
@@ -144,10 +170,11 @@ export default function Home() {
           transition={animations.fadeInUp.transition}
           className="py-24 px-4 tablet:px-6 desktop:px-8 bg-white"
           style={{ willChange: "opacity, transform" }}
+          aria-labelledby="solucoes-personalizadas"
         >
           <div className="mx-auto max-w-7xl">
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              <h2 id="solucoes-personalizadas" className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                 Soluções Personalizadas
               </h2>
               <p className="mt-6 text-lg leading-8 text-gray-600">
@@ -159,13 +186,13 @@ export default function Home() {
                 title="Para Particulares"
                 description="Proteja você e sua família com nossas soluções personalizadas. Oferecemos seguros de vida, saúde, automóvel e residencial adaptados às suas necessidades específicas."
                 imageSrc="/insurance-hero.jpg"
-                imageAlt="Mediação de Seguros Individual"
+                imageAlt="Mediação de Seguros Individual - Proteção para particulares e famílias"
               />
               <HeroCard
                 title="Para Empresas"
                 description="Soluções corporativas completas para proteger seu negócio. Desde seguros de responsabilidade civil até proteção patrimonial, cuidamos do que é importante."
                 imageSrc="/insurance-business.jpg"
-                imageAlt="Mediação de Seguros Empresarial"
+                imageAlt="Mediação de Seguros Empresarial - Proteção para empresas e negócios"
               />
             </div>
           </div>
@@ -178,10 +205,11 @@ export default function Home() {
           transition={animations.fadeInUp.transition}
           className="py-20 px-4 tablet:px-6 desktop:px-8"
           style={{ willChange: "opacity, transform" }}
+          aria-labelledby="servicos-mediacao"
         >
           <div className="mx-auto max-w-7xl">
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              <h2 id="servicos-mediacao" className="text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                 Nossos Serviços de Mediação
               </h2>
               <p className="mt-6 text-lg text-gray-600">
@@ -243,7 +271,7 @@ export default function Home() {
                   <div className="text-3xl tablet:text-4xl mb-4 tablet:mb-6 group-hover:scale-110 transition-transform duration-300">
                     <Image
                       src={service.icon}
-                      alt={service.title}
+                      alt={`Ícone de ${service.title}`}
                       width={32}
                       height={32}
                       className="text-primary"
@@ -260,7 +288,7 @@ export default function Home() {
             </div>
 
             <div className="mt-16 flex justify-center">
-              <Link href="/simulacao">
+              <Link href="/simulacao" aria-label="Solicitar cotação gratuita de seguro">
                 <Button
                   size="lg"
                   className="bg-primary hover:bg-primary/90 text-white shadow-lg hover:scale-105 transition-all duration-300 shadow-primary/25"
@@ -279,10 +307,11 @@ export default function Home() {
           transition={animations.fadeInUp.transition}
           className="py-24 px-4 tablet:px-6 desktop:px-8 bg-gradient-to-br from-primary/5 to-primary/10 rounded-3xl mx-4 my-12"
           style={{ willChange: "opacity, transform" }}
+          aria-labelledby="seguros-vida"
         >
           <div className="mx-auto max-w-7xl">
             <div className="text-center max-w-3xl mx-auto">
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-6">
+              <h2 id="seguros-vida" className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-6">
                 Seguros de Vida
               </h2>
               <p className="text-lg text-gray-600 mb-8 leading-relaxed">
@@ -290,7 +319,7 @@ export default function Home() {
                 personalizadas de seguros de vida.
               </p>
               <div className="flex gap-4 justify-center">
-                <Link href="/simulacao">
+                <Link href="/simulacao" aria-label="Pedir simulação gratuita de seguro de vida">
                   <Button
                     size="lg"
                     className="bg-primary hover:bg-primary/90 text-white shadow-lg 
