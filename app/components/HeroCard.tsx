@@ -33,7 +33,7 @@ export function HeroCard({
   }, [prefersReducedMotion]);
   
   return (
-    <Link href="/simulacao">
+    <Link href="/cotacao">
       <motion.div
         {...hoverAnimation}
         className="h-full"

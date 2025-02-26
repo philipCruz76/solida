@@ -11,7 +11,7 @@ export const ROUTES = {
   CLIENT_AREA: '/cliente',
   PRIVACY: '/privacidade',
   TERMS: '/termos',
-  SIMULATION: '/simulacao',
+  QUOTATION: '/cotacao',
   CAREERS: '/carreiras',
   RESOURCES: '/recursos',
   FAQ: '/faq',

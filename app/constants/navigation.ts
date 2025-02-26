@@ -49,7 +49,7 @@ export const FOOTER_NAV = {
   
   CONTACT: [
     { name: "Contacte-nos", href: ROUTES.CONTACT },
-    { name: "Obter Cotação", href: ROUTES.SIMULATION },
+    { name: "Obter Cotação", href: ROUTES.QUOTATION },
   ] as NavLink[],
 };
 

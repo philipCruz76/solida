@@ -135,7 +135,7 @@ export default function Home() {
                   transition={{ ...animations.fadeInUp.transition, delay: 0.6 }}
                   style={{ willChange: "opacity, transform" }}
                 >
-                  <Link href="/simulacao" className="w-full tablet:w-auto" aria-label="Pedir simulação de seguro">
+                  <Link href="/cotacao" className="w-full tablet:w-auto" aria-label="Pedir simulação de seguro">
                     <Button
                       size="lg"
                       className="w-full py-6 text-base font-medium bg-primary rounded-xl hover:bg-primary/90 text-white shadow-lg hover:scale-105 transition-all duration-300 shadow-primary/25"
@@ -288,7 +288,7 @@ export default function Home() {
             </div>
 
             <div className="mt-16 flex justify-center">
-              <Link href="/simulacao" aria-label="Solicitar cotação gratuita de seguro">
+              <Link href="/cotacao" aria-label="Solicitar cotação gratuita de seguro">
                 <Button
                   size="lg"
                   className="bg-primary hover:bg-primary/90 text-white shadow-lg hover:scale-105 transition-all duration-300 shadow-primary/25"
@@ -319,7 +319,7 @@ export default function Home() {
                 personalizadas de seguros de vida.
               </p>
               <div className="flex gap-4 justify-center">
-                <Link href="/simulacao" aria-label="Pedir simulação gratuita de seguro de vida">
+                <Link href="/cotacao" aria-label="Pedir simulação gratuita de seguro de vida">
                   <Button
                     size="lg"
                     className="bg-primary hover:bg-primary/90 text-white shadow-lg 

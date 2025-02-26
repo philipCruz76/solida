@@ -25,7 +25,7 @@ export const Footer: FC<FooterProps> = () => {
   const currentYear = new Date().getFullYear();
   
   return (
-    <footer className="bg-white border-t border-gray-200 text-gray-600 py-16 px-4 tablet:px-6 desktop:px-8">
+    <footer className="bg-white border-t border-gray-200 text-gray-600 py-16 px-4 tablet:px-6 desktop:px-8 relative z-10">
       <div className="mx-auto max-w-7xl">
         <div className="grid grid-cols-1 gap-8 tablet:grid-cols-2 desktop:grid-cols-6">
           {/* Contact Info */}
