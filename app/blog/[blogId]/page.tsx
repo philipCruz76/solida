@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { Button } from "@/app/components/ui/button";
 import ReactMarkdown from "react-markdown";
+import { NewsletterPopup } from "@/app/components/NewsletterPopup";
 
 // Example blog post data with Markdown content
 const blogPost = {
@@ -129,6 +130,9 @@ export default function BlogPost() {
         </p>
         <Button size="lg">Fale com um Especialista</Button>
       </div>
+
+      {/* Newsletter Popup */}
+      <NewsletterPopup threshold={50} delay={1500} onlyDesktop={true} />
     </article>
   );
 }
