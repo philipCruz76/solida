@@ -1,3 +1,8 @@
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
 export function FAQJsonLd({ questions }: { questions: FAQItem[] }) {
   // Default questions if none are provided
   const defaultQuestions: FAQItem[] = [
