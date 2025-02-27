@@ -2,7 +2,7 @@
 
 import { useState, useRef, FC, useCallback, RefObject, useEffect } from "react";
 import { Button } from "@/app/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronRight, User, FileText } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useScrollDetection } from "@/app/hooks/useScrollDetection";
@@ -65,9 +65,9 @@ export const Navbar: FC<NavbarProps> = () => {
 
   // Common link style for consistency
   const linkStyle =
-    "text-gray-700 hover:text-primary transition-colors font-semibold text-[15px] tracking-normal";
+    "text-white hover:text-white/80 transition-colors font-semibold text-[15px] tracking-normal relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full";
   const mobileLinkStyle =
-    "block px-4 py-3 text-[15px] font-semibold text-gray-700 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors";
+    "flex items-center justify-between w-full px-4 py-3.5 text-[15px] font-medium text-gray-700 hover:text-primary rounded-lg transition-all duration-200 hover:bg-gray-50 group";
 
   return (
     <nav
@@ -75,13 +75,13 @@ export const Navbar: FC<NavbarProps> = () => {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled || isMenuOpen
           ? "bg-white/95 backdrop-blur-md shadow-md"
-          : "bg-transparent"
+          : "bg-gradient-to-b from-black/40 to-transparent backdrop-blur-none"
       }`}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 transition-transform duration-300 hover:scale-105">
             <Link href={ROUTES.HOME} className="flex items-center">
               <Image
                 src="/solida-logo.png"
@@ -89,6 +89,7 @@ export const Navbar: FC<NavbarProps> = () => {
                 width={150}
                 height={150}
                 className="p-4"
+                priority
               />
             </Link>
           </div>
@@ -99,15 +100,32 @@ export const Navbar: FC<NavbarProps> = () => {
               <Link 
                 key={link.name}
                 href={link.href} 
-                className={linkStyle}
+                className={scrolled ? 
+                  "text-gray-700 hover:text-primary transition-colors font-semibold text-[15px] tracking-normal relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full" 
+                  : linkStyle}
               >
                 {link.name}
               </Link>
             ))}
+            <Link href={ROUTES.QUOTATION}>
+              <Button
+                className={`${
+                  scrolled 
+                    ? "bg-primary text-white hover:bg-primary/90" 
+                    : "bg-white/90 text-primary hover:bg-white"
+                } shadow-sm hover:shadow-md transition-all duration-300 font-semibold text-[15px] px-5 rounded-md`}
+              >
+                Solicitar Proposta
+              </Button>
+            </Link>
             <Link href={ROUTES.CLIENT_AREA}>
               <Button
                 variant="outline"
-                className="border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 font-semibold text-[15px]"
+                className={`${
+                  scrolled 
+                    ? "border-primary text-primary hover:bg-primary hover:text-white" 
+                    : "bg-transparent border-white text-white hover:bg-white/20"
+                } transition-all duration-300 font-semibold text-[15px] rounded-md`}
               >
                 Área Cliente
               </Button>
@@ -123,7 +141,11 @@ export const Navbar: FC<NavbarProps> = () => {
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMenuOpen}
               aria-controls="mobile-menu"
-              className="text-gray-700 hover:text-primary transition-colors"
+              className={`${
+                isMenuOpen 
+                  ? "text-gray-700 hover:text-primary" 
+                  : (scrolled ? "text-gray-700 hover:text-primary" : "text-white hover:text-white/80")
+              } hover:bg-transparent transition-all duration-200 ${isMenuOpen ? "rotate-90" : ""}`}
             >
               {isMenuOpen ? (
                 <X className="h-6 w-6" />
@@ -139,33 +161,55 @@ export const Navbar: FC<NavbarProps> = () => {
           id="mobile-menu"
           role="navigation"
           aria-label="Mobile Navigation"
-          className={`desktop:hidden absolute left-0 right-0 top-full bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-lg transition-all duration-300 overflow-hidden ${
+          className={`desktop:hidden absolute left-0 right-0 top-full bg-white shadow-lg border-t border-gray-100 transition-all duration-300 overflow-hidden ${
             isMenuOpen
-              ? "opacity-100 max-h-[500px]"
+              ? "opacity-100 max-h-[600px]"
               : "opacity-0 max-h-0 pointer-events-none"
           }`}
         >
-          <div className="space-y-2 px-4 py-4">
-            {MAIN_NAV_LINKS.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={mobileLinkStyle}
-                onClick={handleMenuItemClick}
-              >
-                {link.name}
+          <div className="px-4 py-2 border-b border-gray-100">
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider px-2 py-3">Menu Principal</h3>
+            <div className="space-y-1">
+              {MAIN_NAV_LINKS.map((link, index) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={`${mobileLinkStyle} transition-all duration-300 ${isMenuOpen ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0"}`}
+                  style={{ transitionDelay: `${index * 50}ms` }}
+                  onClick={handleMenuItemClick}
+                >
+                  <span>{link.name}</span>
+                  <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-primary transition-transform group-hover:translate-x-1" />
+                </Link>
+              ))}
+            </div>
+          </div>
+          
+          <div className="px-4 py-4 mt-2">
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider px-2 py-2 mb-2">Acesso Rápido</h3>
+            <div className="grid grid-cols-1 gap-3">
+              <Link href={ROUTES.QUOTATION} onClick={handleMenuItemClick} className="group">
+                <Button
+                  className="w-full bg-primary text-white hover:bg-primary/90 shadow-sm transition-all duration-300 font-semibold text-[15px] rounded-md flex items-center justify-center py-5"
+                >
+                  <FileText className="h-4 w-4 mr-2 group-hover:animate-pulse" />
+                  <span>Solicitar Proposta</span>
+                </Button>
               </Link>
-            ))}
-            <div className="px-4 py-2">
-              <Link href={ROUTES.CLIENT_AREA} onClick={handleMenuItemClick}>
+              <Link href={ROUTES.CLIENT_AREA} onClick={handleMenuItemClick} className="group">
                 <Button
                   variant="outline"
-                  className="w-full border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 font-semibold text-[15px]"
+                  className="w-full border-primary text-primary hover:bg-primary/10 transition-all duration-300 font-semibold text-[15px] rounded-md flex items-center justify-center py-5"
                 >
-                  Área Cliente
+                  <User className="h-4 w-4 mr-2 group-hover:animate-pulse" />
+                  <span>Área Cliente</span>
                 </Button>
               </Link>
             </div>
+          </div>
+          
+          <div className="py-3 px-8 bg-gray-50 border-t border-gray-100 text-center text-xs text-gray-500">
+            © {new Date().getFullYear()} Sólida Seguros. Todos os direitos reservados.
           </div>
         </div>
       </div>

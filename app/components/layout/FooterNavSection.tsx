@@ -37,15 +37,15 @@ interface FooterNavSectionProps {
 export const FooterNavSection: FC<FooterNavSectionProps> = ({ title, links }) => {
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-4 text-gray-900">
+      <h3 className="text-base font-semibold mb-3 text-gray-900">
         {title}
       </h3>
-      <ul className="space-y-2">
+      <ul className="space-y-1">
         {links.map((item) => (
           <li key={`${title.toLowerCase()}-${item.name.toLowerCase()}`}>
             <Link
               href={item.href}
-              className="text-gray-600 hover:text-primary transition-colors"
+              className="text-sm text-gray-600 hover:text-primary transition-colors"
             >
               {item.name}
             </Link>

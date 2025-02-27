@@ -38,13 +38,13 @@ const team = [
   {
     name: "Lucas Filipe",
     role: "Diretor Comercial",
-    image: "/team/lucas.JPG",
+    image: "/team/team-1.jpg",
     description: "Especialista em seguros empresariais",
   },
   {
     name: "Martim Davi",
     role: "Gestor de Sinistros",
-    image: "/team/martim.JPG",
+    image: "/team/team-2.jpg",
     description: "Dedicado a resolver suas necessidades",
   },
 ];
@@ -138,6 +138,71 @@ export default function SobrePage() {
         </div>
       </motion.section>
 
+
+{/* CEO Statement Section */}
+
+<motion.section
+  id="ceo-statement"
+  initial={{ opacity: 0 }}
+  whileInView={{ opacity: 1 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.6 }}
+  className="py-24 px-4 tablet:px-6 desktop:px-8 bg-gradient-to-b from-blue-50 to-white">
+  <div className="max-w-7xl mx-auto">
+    <div className="flex flex-col tablet:flex-row items-center gap-8">
+      {/* CEO Image */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+        className="tablet:w-2/5 mb-8 tablet:mb-0"
+      >
+        <div className="relative">
+          <div className="absolute -top-4 -left-4 w-full h-full border-2 border-primary/30 rounded-lg"></div>
+          <Image
+            src="/team/pedro.jpg"
+            alt="CEO da Sólida"
+            width={400}
+            height={400}
+            className="rounded-lg shadow-xl object-cover"
+          />
+          <div className="absolute -bottom-6 -left-6">
+            <svg className="h-16 w-16 text-primary/30" fill="currentColor" viewBox="0 0 32 32">
+              <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4z" />
+            </svg>
+          </div>
+        </div>
+      </motion.div>
+      
+      {/* CEO Quote */}
+      <motion.div
+        initial={{ opacity: 0, x: 30 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, delay: 0.4 }}
+        className="tablet:w-3/5 text-left"
+      >
+        <p className="text-xl tablet:text-2xl desktop:text-3xl text-primary font-medium leading-relaxed italic mb-6">
+          "O nosso portfólio de serviços de seguros está a ser rapidamente adotado para proteger negócios modernos. Com a Sólida, as empresas podem agora aproveitar as capacidades incomparáveis de resiliência e proteção, permitindo aos clientes construir, implementar e operar com muito mais rapidez, facilidade e eficácia de custos."
+        </p>
+        <div className="flex flex-col tablet:flex-row tablet:items-center justify-between mt-8">
+          <div>
+            <h3 className="text-xl font-bold text-primary">— Luís Rodrigues</h3>
+            <p className="text-gray-600">CEO, Sólida</p>
+          </div>
+          <motion.div 
+            className="mt-6 tablet:mt-0"
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          >
+            <a href="#valores" className="inline-flex items-center px-6 py-3 border-2 border-primary text-primary rounded-md font-medium hover:bg-primary hover:text-white transition-colors">
+              Saiba mais
+            </a>
+          </motion.div>
+        </div>
+      </motion.div>
+    </div>
+  </div>
+</motion.section>  
       {/* Values Section - Enhanced with hover effects and improved visual hierarchy */}
       <motion.section
         id="valores"

@@ -75,8 +75,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ["var(--font-geist-sans)"],
-        mono: ["var(--font-geist-mono)"],
+        sans: ["var(--font-roboto)", "Roboto", "sans-serif"],
+        mono: ["monospace"],
       },
       borderRadius: {
         lg: "var(--radius)",

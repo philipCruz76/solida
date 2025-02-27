@@ -6,7 +6,7 @@ import { useReducedMotion } from "framer-motion";
 
 const LogoItem = memo(({ index, shouldAnimate }: { index: number; shouldAnimate: boolean }) => (
   <div
-    className={`col-span-1 flex justify-center desktop:grayscale transition-all duration-200 hover:grayscale-0 ${
+    className={`col-span-1 flex justify-center items-center h-24 desktop:grayscale transition-all duration-200 hover:grayscale-0 border border-gray-100 bg-white ${
       shouldAnimate ? "opacity-0 animate-[fadeIn_0.3s_ease-out_forwards]" : "opacity-100"
     }`}
     style={{
@@ -48,15 +48,18 @@ export function LogoCloud() {
   }, [prefersReducedMotion]);
   
   return (
-    <div className="py-12 backdrop-blur-sm">
+    <div className="py-16 border-b border-gray-200 bg-white">
       <div className="mx-auto max-w-7xl px-4 tablet:px-6 desktop:px-8">
-        <p className={`text-center text-xl font-bold text-black/80 ${
-          shouldAnimate ? "opacity-0 animate-[fadeIn_0.3s_ease-out_forwards]" : "opacity-100"
-        }`}
-        style={{ willChange: "opacity" }}>
-          Nossos parceiros
-        </p>
-        <div className="mt-8 grid grid-cols-2 gap-8 tablet:grid-cols-3 desktop:grid-cols-6">
+        <div className="mb-10">
+          <h2 className="text-3xl font-bold text-gray-900 uppercase tracking-tight text-center">
+            Nossos Parceiros
+          </h2>
+          <div className="w-24 h-1 bg-primary mx-auto my-6"></div>
+          <p className="text-center text-gray-600 max-w-2xl mx-auto">
+            Trabalhamos com as melhores seguradoras do mercado para oferecer serviços de qualidade e condições exclusivas
+          </p>
+        </div>
+        <div className="grid grid-cols-2 gap-4 tablet:grid-cols-3 desktop:grid-cols-6">
           {[1, 2, 3, 4, 5, 6].map((index) => (
             <LogoItem key={index} index={index} shouldAnimate={shouldAnimate} />
           ))}

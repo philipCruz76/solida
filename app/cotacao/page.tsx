@@ -37,7 +37,7 @@ export default function SimulationPage() {
   } = useForm<FormData>({
     mode: "onChange",
     defaultValues: {
-      clientType: "individual",
+      clientType: "company",
       firstName: "",
       lastName: "",
       workEmail: "",
